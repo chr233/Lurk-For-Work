@@ -25,7 +25,7 @@ class PageLoader {
       mode: "cors",
     };
 
-    if (name == "logintips") {
+    if (name == "login-tips") {
       name = "login";
     }
 
