@@ -1,0 +1,135 @@
+section.jobs > *,
+section.jobs > div > form > p.center {
+  text-align: center;
+}
+section.jobs > div > form {
+  text-align: right;
+  display: inline-block;
+}
+section.jobs > div > form > p > textarea {
+  resize: vertical;
+  padding: 10px;
+  line-height: 1.5;
+  width: 200px;
+  height: 5em;
+}
+section.jobs > div > form > p > input {
+  width: 200px;
+  line-height: 1.5;
+  padding: 0 10px;
+  height: 2.25em;
+}
+section.jobs > div > form > p.center > button,
+section.jobs > div > button {
+  padding: 5px 10px;
+}
+section.jobs>h3>button{
+  padding: 5px;
+}
+section.jobs>h3>button:hover{
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.job-list {
+  display: block;
+  justify-content: center;
+  counter-reset: count;
+  list-style: none;
+  padding: 0;
+}
+.job-list > li {
+  display: block;
+  break-inside: avoid;
+  position: relative;
+}
+.job-list > li::after {
+  counter-increment: count;
+  content: counter(count);
+  width: 1.5em;
+  height: 1.5em;
+  background-color: #000000e6;
+  color: #ffffff;
+  line-height: 1.5em;
+  text-align: center;
+  position: absolute;
+  font-size: 1em;
+  z-index: 2;
+  left: 0;
+  top: 0;
+}
+.job-list > li > * {
+  margin: 3px 0;
+}
+.job-list > li > * > * {
+  margin: 0 3px;
+}
+section.jobs > div > form > p > img,
+.job-list > li > img {
+  max-height: 64px;
+  max-width: 64px;
+  border-radius: 10px;
+}
+.job-list > li:nth-of-type(3n + 2) {
+  background-color: var(--job-list-bgcolor1);
+}
+.job-list > li:nth-of-type(3n + 1) {
+  background-color: var(--job-list-bgcolor2);
+}
+.job-list > li:nth-of-type(3n) {
+  background-color: var(--job-list-bgcolor3);
+}
+.job-item > p >  *:not(ul):hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.job-title {
+  font-size: 0.9em;
+}
+.job-title::before {
+  content: "[";
+}
+.job-title::after {
+  content: "]:";
+}
+.job-rt {
+  position: absolute;
+  margin: 0;
+  right: 0;
+  top: 0;
+}
+.job-id > * {
+  position: unset;
+}
+.job-id {
+  color: #000;
+  text-decoration: none;
+  border: dotted 1px #00000000;
+  border-radius: 5px;
+  padding: 2px;
+}
+.job-id:hover {
+  border: dotted 1px #000000;
+}
+.job-send-comment {
+  padding: 10px 0;
+}
+.job-send-comment > * {
+  padding: 3px;
+}
+.job-input-comment {
+  width: 70%;
+}
+.job-btn-comment {
+  width: 20%;
+  margin-left: 10px;
+}
+.job-btn-delete {
+  position: absolute;
+  top: 25px;
+  right: 0;
+}
+.job-btn-edit {
+  position: absolute;
+  top: 25px;
+  right: 60px;
+}

@@ -1,0 +1,25 @@
+section.form > h3 {position: relative;
+  left: 80px;
+}
+
+section.form > form > p {
+  display: flex;
+}
+
+section.form > form > p > input {
+  border: 1px solid #949494;
+  border-radius: 4px;
+  height: 2.25em;
+  line-height: 1.5;
+  width: 300px;
+  position: relative;
+  padding: 0 10px;
+}
+
+section.form > form > p > button {
+  padding: 5px 10px;
+}
+section.form > form > p > label {
+  display: block;
+  width: 80px;
+}

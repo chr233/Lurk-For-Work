@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+header {
+  left: 0;
+  top: 0;
+  width: 100%;
+  position: sticky;
+  z-index: 100;
+}
+
+main {
+  display: block;
+  position: relative;
+  margin: 0 auto;
+  max-width: 960px;
+  width: 960px;
+  height: 100%;
+}
+
+footer {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.expand {
+  transform: scaleY(0);
+  transition: transform 0.1s;
+  transform-origin: top center;
+  height: 0;
+}
+.expand.active {
+  transform: scaleY(1);
+  transition: transform 0.1s;
+  transform-origin: top center;
+  height: auto;
+}
+
+.cc3{
+  column-count: 3;
+  column-gap: 10px;
+}
+.cc2{
+  column-count: 2;
+  column-gap: 10px;
+}
+.cc1{
+  column-count: 1;
+  column-gap: 10px;
+}

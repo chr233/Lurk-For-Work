@@ -1,0 +1,29 @@
+<section class="jobs">
+    <h3 id="view-title">Edit Job & New Job</h3>
+    <div class="new-job">
+        <form id="publish-job">
+            <p>
+                <label for="title">Title:</label>
+                <input id="title" type="text" placeholder="Job Title" required>
+            </p>
+            <p>
+                <label for="title">Description:</label>
+                <textarea id="description" placeholder="Job description" required></textarea>
+            </p>
+            <p>
+                <label for="image">Image:</label>
+                <img src="" id="preview" alt="Error">
+                <input id="image" type="file" accept="image/png, image/jpeg, image/jpg" required>
+                <input id="image-data" type="hidden">
+                <input id="job-id" type="hidden">
+            </p>
+            <p>
+                <label for="start">Start:</label>
+                <input id="start" type="datetime-local" max="2099-12-31T23:59" min="2000-01-01T00:00" required>
+            </p>
+            <p class="center">
+                <button id="submit-btn" type="submit">Publish Job</button>
+            </p>
+        </form>
+    </div>
+</section>

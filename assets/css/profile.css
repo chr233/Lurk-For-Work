@@ -1,0 +1,43 @@
+section.profile > * {
+  text-align: center;
+}
+#search-user > p > * {
+  margin: 0 5px;
+}
+#search-user > p > input {
+  width: 200px;
+  line-height: 1.5;
+  padding: 0 10px;
+  height: 2.25em;
+}
+#search-user > p > button {
+  padding: 7px 10px;
+}
+#user-profile {
+  padding: 30px;
+  background: var(--profile-bgcolor2);
+}
+
+#user-profile.nothing {
+  background: linear-gradient(
+    45deg,
+    var(--profile-bgcolor1) 25%,
+    var(--profile-bgcolor2) 0,
+    var(--profile-bgcolor2) 50%,
+    var(--profile-bgcolor1) 0,
+    var(--profile-bgcolor1) 75%,
+    var(--profile-bgcolor2) 0
+  );
+  background-size: 30px 30px;
+}
+#user-profile > div > p,
+.profile-job-list > li>p {
+  margin: 5px 0;
+}
+#user-profile >div>p>span {
+  padding: 5px;
+}
+#user-profile > div > p > *:not(ul):hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

@@ -1,0 +1,13 @@
+:root {
+  --nav-font-color: #fff;
+  --nav-bgcolor: #333;
+  --nav-hover-bgcolor: #111;
+  --profile-bgcolor1: #00000031;
+  --profile-bgcolor2: #9ca4a83a;
+  --foot-bgcolor: #fafafa;
+  --foot-font-color: #333;
+  --job-title-color: #808080;
+  --job-list-bgcolor1: #bbff0018;
+  --job-list-bgcolor2: #00b7ff21;
+  --job-list-bgcolor3: #ff660018;
+}
