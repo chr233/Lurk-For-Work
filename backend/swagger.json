@@ -1,0 +1,819 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "LurkForWork CRUD Server",
+    "description": "Server that powers the LurkForWork frontend",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Managing user authentication and authorization"
+    },
+    {
+      "name": "Jobs",
+      "description": "Creating and managing job postings"
+    },
+    {
+      "name": "Users",
+      "description": "Managing user profiles"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Token": {
+        "type": "string",
+        "description": "Token to provide authorization",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhheWRlbkB1bnN3LmVkdS5hdSIsImlhdCI6MTYwMzk0MzIzMH0.b37PfwlcH_cue6yhgvDt2IiNvhRACf79hTNtacYB94Q"
+      },
+      "Start": {
+        "type": "integer",
+        "description": "Starting index for pagination",
+        "example": 0
+      },
+      "Email": {
+        "type": "string",
+        "description": "User's email address",
+        "example": "betty@email.com"
+      },
+      "Password": {
+        "type": "string",
+        "description": "User's password",
+        "example": "cardigan"
+      },
+      "UserName": {
+        "type": "string",
+        "description": "User's name",
+        "example": "Betty"
+      },
+      "UserId": {
+        "type": "number",
+        "description": "ID of the user",
+        "example": 61021
+      },
+      "UserImage": {
+        "type": "string",
+        "description": "User's profile image (stored as base64). You will get out what you put in",
+        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+      },
+      "User": {
+        "type": "object",
+        "description": "Detailed information of the user",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UserId"
+          },
+          "email": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "name": {
+            "$ref": "#/components/schemas/UserName"
+          },
+          "image": {
+            "$ref": "#/components/schemas/UserImage"
+          }
+        }
+      },
+      "UserFull": {
+        "type": "object",
+        "description": "Detailed information of the user",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UserId"
+          },
+          "email": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "name": {
+            "$ref": "#/components/schemas/UserName"
+          },
+          "image": {
+            "$ref": "#/components/schemas/UserImage"
+          },
+          "watcheeUserIds": {
+            "$ref": "#/components/schemas/UserIds"
+          },
+          "jobs": {
+            "type": "array",
+            "description": "Array of job postings by this user",
+            "items": {
+              "$ref": "#/components/schemas/JobFull"
+            }
+          }
+        }
+      },
+      "TurnOn": {
+        "type": "boolean",
+        "description": "True if should add/enable, false if should remove/disable",
+        "example": true
+      },
+      "Jobs": {
+        "type": "array",
+        "description": "Array of all the job postings of people you watch",
+        "items": {
+          "$ref": "#/components/schemas/JobFull"
+        }
+      },
+      "UserIds": {
+        "type": "array",
+        "description": "List of user IDs",
+        "items": {
+          "$ref": "#/components/schemas/UserId"
+        }
+      },
+      "JobFull": {
+        "type": "object",
+        "description": "Full details of the job posting",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/JobId"
+          },
+          "creatorId": {
+            "$ref": "#/components/schemas/UserId"
+          },
+          "title": {
+            "$ref": "#/components/schemas/JobTitle"
+          },
+          "image": {
+            "$ref": "#/components/schemas/JobImage"
+          },
+          "start": {
+            "$ref": "#/components/schemas/JobStart"
+          },
+          "description": {
+            "$ref": "#/components/schemas/JobDescription"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          "likes": {
+            "type": "array",
+            "description": "Array of all the users who have liked this job post",
+            "items": {
+              "$ref": "#/components/schemas/JobUserLike"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "description": "Array of all the comments users have made on this job post",
+            "items": {
+              "$ref": "#/components/schemas/JobUserComment"
+            }
+          }
+        }
+      },
+      "JobBasic": {
+        "type": "object",
+        "description": "Basic details of the job posting",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/JobTitle"
+          },
+          "image": {
+            "$ref": "#/components/schemas/JobImage"
+          },
+          "start": {
+            "$ref": "#/components/schemas/JobStart"
+          },
+          "description": {
+            "$ref": "#/components/schemas/JobDescription"
+          }
+        }
+      },
+      "JobBasicWithId": {
+        "type": "object",
+        "description": "Basic details of the job posting based on a unique id",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/JobId"
+          },
+          "title": {
+            "$ref": "#/components/schemas/JobTitle"
+          },
+          "image": {
+            "$ref": "#/components/schemas/JobImage"
+          },
+          "start": {
+            "$ref": "#/components/schemas/JobStart"
+          },
+          "description": {
+            "$ref": "#/components/schemas/JobDescription"
+          }
+        }
+      },
+      "JobTitle": {
+        "type": "string",
+        "description": "Name of the job post",
+        "example": "COO for cupcake factory"
+      },
+      "JobImage": {
+        "type": "string",
+        "description": "Job's content image (stored as base64). You will get out what you put in",
+        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+      },
+      "JobStart": {
+        "type": "string",
+        "description": "Timestamp of when the job starts in simplified extended ISO format",
+        "example": "2011-10-05T14:48:00.000Z"
+      },
+      "JobDescription": {
+        "type": "string",
+        "description": "Description of the job posting",
+        "example": "Dedicated technical wizard with a passion and interest in human relationships"
+      },
+      "JobComment": {
+        "type": "string",
+        "description": "Comment on a job posting",
+        "example": "This is a great opportunity, my email is hello@unsw.edu.au"
+      },
+      "JobUserLike": {
+        "type": "object",
+        "description": "Details about a particular like on a job posting",
+        "properties": {
+          "userId": {
+            "$ref": "#/components/schemas/UserId"
+          },
+          "userEmail": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "userName": {
+            "$ref": "#/components/schemas/UserName"
+          }
+        }
+      },
+      "JobUserComment": {
+        "type": "object",
+        "description": "Details about a particular comment on a job posting",
+        "properties": {
+          "userId": {
+            "$ref": "#/components/schemas/UserId"
+          },
+          "userEmail": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "userName": {
+            "$ref": "#/components/schemas/UserName"
+          },
+          "comment": {
+            "$ref": "#/components/schemas/JobComment"
+          }
+        }
+      },
+      "JobId": {
+        "type": "number",
+        "description": "ID of the job",
+        "example": 528491
+      },
+      "Timestamp": {
+        "type": "string",
+        "description": "Timestamp string in simplified extended ISO format",
+        "example": "2011-10-05T14:48:00.000Z"
+      }
+    },
+    "parameters": {
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "description": "User's authorised token",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Token"
+        }
+      },
+      "UserIdParam": {
+        "name": "userId",
+        "in": "query",
+        "description": "User ID",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/UserId"
+        }
+      },
+      "PaginationStart": {
+        "name": "start",
+        "in": "query",
+        "description": "Start Index",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Start"
+        }
+      }
+    },
+    "responses": {
+      "Success": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "AccessError": {
+        "description": "Access error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          }
+        }
+      },
+      "InputError": {
+        "description": "Input error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Invalid input"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Registers a user in the application",
+        "description": "Given user details, registers the user and returns an authorised access token for making subsequent calls",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/schemas/Email"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/Password"
+                  },
+                  "name": {
+                    "$ref": "#/components/schemas/UserName"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "$ref": "#/components/schemas/Token"
+                    },
+                    "userId": {
+                      "$ref": "#/components/schemas/UserId"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logs a user in to the application",
+        "description": "Given correct user credentials, returns an authorised access token for making subsequent calls",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/schemas/Email"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/Password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "$ref": "#/components/schemas/Token"
+                    },
+                    "userId": {
+                      "$ref": "#/components/schemas/UserId"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          }
+        }
+      }
+    },
+    "/job/feed": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Get a list of all the job posts",
+        "description": "Returns the details of the next five job postings, beginning from the 'Start Index', belonging to the users whom the currently logged-in user watches.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PaginationStart"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Jobs"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      }
+    },
+    "/job": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Create a new job posting",
+        "description": "Create a new job posting with the given details",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobBasic"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Object containing the Job ID of the newly created job post",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/JobId"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Update a job listing",
+        "description": "Update fields on a existing job listing",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobBasicWithId"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Delete a job posting",
+        "description": "Delete a job posting given a particular job ID",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/JobId"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      }
+    },
+    "/job/comment": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Comments on a job post",
+        "description": "Allow the current user to leave a text comment on a job post from a user they are watching.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/JobId"
+                  },
+                  "comment": {
+                    "$ref": "#/components/schemas/JobComment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      }
+    },
+    "/job/like": {
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Like or unlike a job post",
+        "description": "Allow the current user to like or unlike a job post from a user they are watching. If 'on' is set to true then the action 'likes' a post. If 'on' is set to false, then the action unlikes a post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/JobId"
+                  },
+                  "turnon": {
+                    "$ref": "#/components/schemas/TurnOn"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get the details of a specific user",
+        "description": "Returns basic details of a specific user",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserFull"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user's own profile",
+        "description": "Updates the users' email, password, name, and/or image with the given details. It will only update defined fields provided. Any fields given that are undefined will remain unchanged.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/schemas/Email"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/Password"
+                  },
+                  "name": {
+                    "$ref": "#/components/schemas/UserName"
+                  },
+                  "image": {
+                    "$ref": "#/components/schemas/UserImage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      }
+    },
+    "/user/watch": {
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Watching or unwatching another user",
+        "description": "Specify whether this user should be watching or unwatching another user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/parameters/UserEmail"
+                  },
+                  "turnon": {
+                    "$ref": "#/components/schemas/TurnOn"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/InputError"
+          },
+          "403": {
+            "$ref": "#/components/responses/AccessError"
+          }
+        }
+      }
+    }
+  }
+}
