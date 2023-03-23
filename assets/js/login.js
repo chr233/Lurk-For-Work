@@ -7,9 +7,6 @@
     const email = document.getElementById("email");
     const passwd = document.getElementById("passwd");
 
-    email.value = "betty@email.com";
-    passwd.value = "cardigan";
-
     document.getElementById("login-form").addEventListener("submit", login);
 
     objs = { email, passwd };

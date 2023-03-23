@@ -9,11 +9,6 @@
     const passwd = document.getElementById("passwd");
     const passwd2 = document.getElementById("passwd2");
 
-    name.value = "Luo";
-    email.value = "t@t.tt";
-    passwd.value = "114514";
-    passwd2.value = passwd.value;
-
     document.getElementById("signup-form").addEventListener("submit", signup);
 
     objs = { name, email, passwd, passwd2 };
