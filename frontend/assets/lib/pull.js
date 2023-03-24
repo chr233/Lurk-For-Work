@@ -1,0 +1,3 @@
+class PullService {
+  init() {}
+}

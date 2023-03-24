@@ -35,7 +35,10 @@ class Router {
       }
     }
 
-    document.title = `Lurk For Work - ${path}`;
+    document.title =
+      "Lurk For Work - " +
+      path[0].toUpperCase() +
+      path.substr(1, path.length);
 
     this.setNavibar();
 

@@ -19,12 +19,22 @@
             <li class="nav-logo"><a href="#/"><img src="/assets/img/logo.webp">&nbsp; Lurk For Work</a></li>
             <li><a href="#feed">Feed</a></li>
             <li><a href="#profile">Profile</a></li>
-            <li><a href="#about">About</a></li>
             <li none class="nav-right"><a href="#signup">Sign Up</a></li>
             <li none class="nav-right"><a href="#login">Log in</a></li>
-            <li auth class="nav-right"><a id="logout">Log out</a></li>
-            <li auth class="nav-right"><a href="#profile" id="username"></a></li>
-            <li auth class="nav-right"><a href="#edit-profile">Edit</a></li>
+            <li auth class="nav-right nav-submenu">
+                <a href="#profile" id="username">Username</a>
+                <ul class="box">
+                    <li><a href="#edit-profile">Edit Profile</a></li>
+                    <li><a id="logout">Log Out</a></li>
+                </ul>
+            </li>
+            <li auth class="nav-right nav-submenu">
+                <a href="#profile" id="1">Message</a>
+                <ul class="box">
+                    <li><a href="#edit-profile">123456789</a></li>
+                    <li><a id="logout">123456789</a></li>
+                </ul>
+            </li>
         </ul>
     </header>
 

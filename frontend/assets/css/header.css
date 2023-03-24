@@ -1,4 +1,4 @@
-header > ul {
+header ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -10,26 +10,42 @@ header > ul > li {
   float: left;
 }
 
-header > ul > li > a {
+header ul > li > a {
   display: flex;
   color: var(--nav-font-color);
   text-align: center;
   text-decoration: none;
-  padding: 14px 16px;
   cursor: pointer;
+  padding: 14px 16px;
 }
+
 header > ul > li > a > img {
   height: 20px;
 }
 
-header > ul > li > a:hover {
+header ul > li > a:hover {
   background-color: var(--nav-hover-bgcolor);
 }
 
-header > UL > .nav-right {
+header .nav-right {
   float: right;
 }
 
-header > UL > .nav-hidden {
+header .nav-hidden {
   display: none;
+}
+
+header .nav-submenu > ul {
+  position: fixed;
+  height: 0;
+  width: 0;
+  transform: scaleY(0) scaleX(0);
+  transition: transform 0.1s;
+}
+
+header .nav-submenu:hover > ul {
+  height: 100%;
+  width: 100%;
+  transform: scaleY(1) scaleX(1);
+  transition: transform 0.1s;
 }

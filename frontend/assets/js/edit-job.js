@@ -83,7 +83,7 @@
   function publishJob(event) {
     event.preventDefault();
 
-    const { title, description, imageData, start, publishForm } = objs;
+    const { title, description, imageData, start, publishForm, preview } = objs;
 
     if (!imageData.value) {
       alert("Please select a valid picture.");
@@ -99,6 +99,7 @@
 
         alert("Job is created successfully!");
         publishForm.reset();
+        preview.src = "";
       });
   }
 
