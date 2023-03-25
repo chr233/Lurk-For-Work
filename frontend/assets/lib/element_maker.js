@@ -181,9 +181,16 @@ class ElementMaker {
     li.appendChild(pCreate);
 
     const pCreator = this.genP();
-    pCreator.appendChild(this.genSpan("Creator Id", "job-title"));
+    pCreator.appendChild(this.genSpan("Creator", "job-title"));
+    const userName = $api.userNameDict[creatorId] ?? "Unknown";
+
     pCreator.appendChild(
-      this.genA(creatorId, `#profile=${creatorId}`, "job-id", "View details")
+      this.genA(
+        `${userName} [${creatorId}]`,
+        `#profile=${creatorId}`,
+        "job-id",
+        "View details"
+      )
     );
     li.appendChild(pCreator);
 
