@@ -7,6 +7,7 @@
   // init
   window.SPA_INIT = (args) => {
     const jobList = document.getElementById("job-list");
+    const btnBackTop = document.getElementById("back-top");
     const btnLoadMore = document.getElementById("load-more");
 
     btnLoadMore.addEventListener("click", () => loadJobList(currentIndex));
@@ -24,11 +25,37 @@
     if (!args || args < 0) {
       args = 0;
     }
+
+    if (args === 0) {
+      btnBackTop.style.display = "none";
+    }
+    btnBackTop.addEventListener("click", () => {
+      location.hash = "#feed=0";
+      location.reload();
+    });
+
+    currentIndex = args;
     loadJobList(args);
+
+    // setup infinite scroll
+    var io = new IntersectionObserver((ioes) => {
+      for (let ioe of ioes) {
+        if (ioe.intersectionRatio > 0) {
+          loadJobList(currentIndex);
+        }
+        if (loadJobList.disabled) {
+          io.unobserve(btnLoadMore);
+        }
+        console.log(ioe.intersectionRatio);
+      }
+    });
+    io.observe(btnLoadMore);
   };
 
   // hash change
-  window.WPA_CHANGE = (args) => {};
+  window.WPA_CHANGE = (args) => {
+    console.log("hash change event");
+  };
 
   function loadJobList(start) {
     const { jobList, btnLoadMore } = objs;

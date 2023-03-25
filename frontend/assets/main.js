@@ -4,6 +4,7 @@ import { $router } from "./lib/router.js";
 import { $http } from "./lib/http_client.js";
 import { $api } from "./lib/api_util.js";
 import { $ele } from "./lib/element_maker.js";
+import { $pull } from "./lib/pull.js";
 import { fileToDataUrl } from "./lib/helpers.js";
 
 // define global vars
@@ -15,9 +16,11 @@ window.fileToDataUrl = fileToDataUrl;
 window.myInfo = {};
 window.jobInfo = null;
 
+// setup event handler
 window.addEventListener("hashchange", $router.router);
 window.addEventListener("load", $router.router);
 
+// check session
 $api.checkToken().then((succ) => {
   if (succ) {
     const { name, id } = window.myInfo;
@@ -35,3 +38,10 @@ document.getElementById("logout").addEventListener("click", () => {
   $router.setNavibar();
   location.hash = "#login";
 });
+
+// setup polling service
+$pull.init();
+
+document
+  .getElementById("clear-notice")
+  .addEventListener("click", () => $pull.clearNotice());

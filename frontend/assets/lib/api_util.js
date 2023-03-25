@@ -86,7 +86,6 @@ class ApiUtil {
   getUser(userId) {
     return new Promise((resolve, reject) => {
       $http.get(`/user?userId=${userId}`).then(([succ, data]) => {
-        console.log(data);
         resolve([succ, data]);
       });
     });

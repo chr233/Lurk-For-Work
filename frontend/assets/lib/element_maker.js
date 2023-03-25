@@ -212,6 +212,7 @@ class ElementMaker {
             pLike.children[2].textContent = isLiked ? "Unlike" : "Like";
           } else {
             alert(data);
+            isLiked = !isLiked;
           }
         });
       })
@@ -236,7 +237,7 @@ class ElementMaker {
     );
     li.appendChild(pComment);
 
-    const ulCommentList = this.genUl("job-list cc1");
+    const ulCommentList = this.genUl("job-list");
 
     for (let { userId, userEmail, userName, comment } of comments) {
       const pCommentItem = this.genLi("job-item");
@@ -372,7 +373,7 @@ class ElementMaker {
       const pJob = this.genP();
       pJob.appendChild(this.genSpan("Jobs List", "job-title"));
 
-      const jobUl = this.genUl("job-list cc3");
+      const jobUl = this.genUl("job-list");
       for (let job of jobs) {
         const li = this.genJobItem(job);
         jobUl.appendChild(li);

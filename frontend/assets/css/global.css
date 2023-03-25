@@ -18,7 +18,7 @@ main {
   position: relative;
   margin: 0 auto;
   max-width: 960px;
-  width: 960px;
+  /* width: 960px; */
   height: 100%;
 }
 
@@ -40,15 +40,10 @@ footer {
   height: auto;
 }
 
-.cc3{
-  column-count: 3;
-  column-gap: 10px;
-}
-.cc2{
-  column-count: 2;
-  column-gap: 10px;
-}
-.cc1{
-  column-count: 1;
-  column-gap: 10px;
+@media (max-width: 500px) {
+  button,
+  input[type="submit"],
+  input[type="button"] {
+    padding: 5px;
+  }
 }

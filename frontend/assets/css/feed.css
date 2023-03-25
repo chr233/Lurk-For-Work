@@ -23,10 +23,10 @@ section.jobs > div > form > p.center > button,
 section.jobs > div > button {
   padding: 5px 10px;
 }
-section.jobs>h3>button{
+section.jobs > h3 > button {
   padding: 5px;
 }
-section.jobs>h3>button:hover{
+section.jobs > h3 > button:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -78,7 +78,7 @@ section.jobs > div > form > p > img,
 .job-list > li:nth-of-type(3n) {
   background-color: var(--job-list-bgcolor3);
 }
-.job-item > p >  *:not(ul):hover {
+.job-item > p > *:not(ul):hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
