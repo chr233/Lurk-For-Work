@@ -13,20 +13,28 @@ class PullService {
         if (succ) {
           clearInterval(t1);
           console.log("init pull service 1");
-          setInterval(() => this.checkMyJobs(true), 2000);
+          setInterval(() => this.checkMyJobs(true), 3000);
         }
       });
-    }, 2000);
+    }, 1000);
 
     const t2 = setInterval(() => {
       this.checkOthersJobs(false).then((succ) => {
         if (succ) {
           clearInterval(t2);
           console.log("init pull service 2");
-          setInterval(() => this.checkOthersJobs(true), 2000);
+          setInterval(() => this.checkOthersJobs(true), 3000);
         }
       });
-    }, 2000);
+    }, 1000);
+
+    setInterval(() => {
+      $api.getUser(localStorage.getItem("userId")).then(([succ, data]) => {
+        if(succ){
+          window.myInfo=data;
+        }
+      });
+    }, 10000);
   }
 
   checkMyJobs(enable) {

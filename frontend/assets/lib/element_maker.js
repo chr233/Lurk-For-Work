@@ -206,6 +206,32 @@ class ElementMaker {
     }
     let likeCount = likes?.length ?? 0;
 
+    const pLikeList = this.genP("expand");
+    const ulLikeList = this.genUl("job-list");
+
+    for (let { userId, userEmail, userName } of likes) {
+      const pCommentItem = this.genLi("job-item");
+      const p1 = this.genP("");
+      const link = this.genA("", `#profile=${userId}`, "job-id", userEmail);
+      link.appendChild(this.genSpan(userName, "job-text"));
+      link.appendChild(this.genSpan(" ", "job-text"));
+      link.appendChild(this.genSpan(userEmail, "job-text"));
+      p1.appendChild(link);
+
+      pCommentItem.appendChild(p1);
+      ulLikeList.appendChild(pCommentItem);
+    }
+
+    pLikeList.appendChild(ulLikeList);
+
+    if (!isLiked) {
+      likes.push({
+        userId: myInfo.id,
+        userEmail: myInfo.email,
+        userName: myInfo.name,
+      });
+    }
+
     const pLike = this.genP();
     pLike.appendChild(this.genSpan("Likes", "job-title"));
     pLike.appendChild(this.genSpan(likeCount, "job-text"));
@@ -217,6 +243,31 @@ class ElementMaker {
             likeCount += isLiked ? 1 : -1;
             pLike.children[1].textContent = likeCount;
             pLike.children[2].textContent = isLiked ? "Unlike" : "Like";
+
+            const tmp = this.genUl("job-list");
+
+            for (let { userId, userEmail, userName } of likes) {
+              if (!isLiked && userId === myInfo.id) {
+                continue;
+              }
+              const pCommentItem = this.genLi("job-item");
+              const p1 = this.genP("");
+              const link = this.genA(
+                "",
+                `#profile=${userId}`,
+                "job-id",
+                userEmail
+              );
+              link.appendChild(this.genSpan(userName, "job-text"));
+              link.appendChild(this.genSpan(" ", "job-text"));
+              link.appendChild(this.genSpan(userEmail, "job-text"));
+              p1.appendChild(link);
+
+              pCommentItem.appendChild(p1);
+              tmp.appendChtmpild(pCommentItem);
+            }
+
+            pLikeList.replaceChild(tmp, pLikeList.children[0]);
           } else {
             alert(data);
             isLiked = !isLiked;
@@ -224,7 +275,20 @@ class ElementMaker {
         });
       })
     );
+    pLike.appendChild(
+      this.genButton("Expand", "job-btn", () => {
+        if (pLikeList.classList.contains("active")) {
+          pLikeList.classList.remove("active");
+          pLike.children[3].textContent = "Expand";
+        } else {
+          pLikeList.classList.add("active");
+          pLike.children[3].textContent = "Collapse";
+        }
+      })
+    );
     li.appendChild(pLike);
+
+    li.appendChild(pLikeList);
 
     const pCommentList = this.genP("expand");
 
@@ -354,6 +418,29 @@ class ElementMaker {
       }
       let watchCount = watcheeUserIds?.length ?? 0;
 
+      const pFollowList = this.genP("expand");
+      const ulFollowList = this.genUl("job-list");
+
+      for (let id of watcheeUserIds) {
+        const uName = $api.userNameDict[id];
+        if (!uName) {
+          continue;
+        }
+
+        const pCommentItem = this.genLi("job-item");
+        const p1 = this.genP("");
+        const link = this.genA(`${uName} [${id}]`, `#profile=${id}`, "job-id", null);
+        p1.appendChild(link);
+        pCommentItem.appendChild(p1);
+        ulFollowList.appendChild(pCommentItem);
+      }
+
+      pFollowList.appendChild(ulFollowList);
+
+      if (!isWatching) {
+        watcheeUserIds.push(myInfo.id);
+      }
+
       const pFollow = this.genP();
       pFollow.appendChild(this.genSpan("Watchee", "job-title"));
       pFollow.appendChild(this.genSpan(watchCount, "job-text"));
@@ -367,13 +454,50 @@ class ElementMaker {
               pFollow.children[2].textContent = isWatching
                 ? "Unwatch"
                 : "Watch";
+
+              const tmp = this.genUl("job-list");
+
+              for (let id of watcheeUserIds) {
+                if (!isWatching && id === myInfo.id) {
+                  continue;
+                }
+                const uName = $api.userNameDict[id];
+                if (!uName) {
+                  console.log($api.userNameDict)
+                  continue;
+                }
+
+                const pCommentItem = this.genLi("job-item");
+                const p1 = this.genP("");
+                const link = this.genA(`${uName} [${id}]`, `#profile=${id}`, "job-id", null);
+                p1.appendChild(link);
+                pCommentItem.appendChild(p1);
+                tmp.appendChild(pCommentItem);
+              }
+
+              pFollowList.replaceChild(tmp, pFollowList.children[0]);
             } else {
               alert(data);
             }
           });
         })
       );
+      pFollow.appendChild(this.genSpan(""));
+      pFollow.appendChild(
+        this.genButton("Expand", "job-btn", () => {
+          if (pFollowList.classList.contains("active")) {
+            pFollowList.classList.remove("active");
+            pFollow.children[4].textContent = "Expand";
+          } else {
+            pFollowList.classList.add("active");
+            pFollow.children[4].textContent = "Collapse";
+          }
+        })
+      );
+
       div.appendChild(pFollow);
+
+      div.appendChild(pFollowList);
 
       div.appendChild(this.genHr());
 

@@ -3,6 +3,7 @@
 
   let objs = {};
   let currentIndex = 0;
+  let init = false;
 
   // init
   window.SPA_INIT = (args) => {
@@ -36,24 +37,13 @@
 
     currentIndex = args;
     loadJobList(args);
-
-    // setup infinite scroll
-    var io = new IntersectionObserver((ioes) => {
-      for (let ioe of ioes) {
-        if (ioe.intersectionRatio > 0) {
-          loadJobList(currentIndex);
-        }
-        if (loadJobList.disabled) {
-          io.unobserve(btnLoadMore);
-        }
-        console.log(ioe.intersectionRatio);
-      }
-    });
-    io.observe(btnLoadMore);
   };
 
   // hash change
   window.WPA_CHANGE = (args) => {
+    if (args !== currentIndex) {
+      location.reload();
+    }
     console.log("hash change event");
   };
 
@@ -72,12 +62,34 @@
           const li = $ele.genJobItem(x);
           jobList.appendChild(li);
         }
+
+        if (!init) {
+          initInfiniteScroll();
+        }
       } else {
         btnLoadMore.disabled = true;
         btnLoadMore.textContent = "Oppos, there is no more jobs";
       }
     });
 
-    location.hash = `#feed=${currentIndex}`;
+    const cur = currentIndex > 0 ? currentIndex - 1 : 0;
+    location.hash = `#feed=${cur}`;
+  }
+
+  function initInfiniteScroll() {
+    const { btnLoadMore } = objs;
+
+    // setup infinite scroll
+    const io = new IntersectionObserver((ioes) => {
+      const ioe = ioes[0];
+      if (ioe.intersectionRatio > 0) {
+        loadJobList(currentIndex);
+      }
+      if (btnLoadMore.disabled) {
+        io.disconnect();
+      }
+      console.log(ioe.intersectionRatio);
+    });
+    io.observe(btnLoadMore);
   }
 })();

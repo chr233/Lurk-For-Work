@@ -36,43 +36,54 @@ class PageLoader {
         window.SPA_INIT = null;
         window.SPA_CHANGE = null;
 
-        fetch(url, opt)
-          .then((response) => response.text())
-          .then((data) => {
-            if (args) {
-              console.log("load page at:", url, "args", args);
-            } else {
-              console.log("load page at:", url);
-            }
+        const t = setInterval(() => {
+          if (
+            window.myInfo ||
+            name === "login" ||
+            name === "signup" ||
+            name === "login-tips"
+          ) {
+            clearInterval(t);
+            
+            fetch(url, opt)
+              .then((response) => response.text())
+              .then((data) => {
+                if (args) {
+                  console.log("load page at:", url, "args", args);
+                } else {
+                  console.log("load page at:", url);
+                }
 
-            const newEle = window.$ele.updateElementHtml(ele, data);
+                const newEle = window.$ele.updateElementHtml(ele, data);
 
-            // load js for views
-            const scriptEle = document.createElement("script");
-            scriptEle.type = "text/javascript";
-            scriptEle.src = `/assets/js/${name}.js`;
-            scriptEle.async = true;
-            scriptEle.addEventListener("load", () => {
-              console.log("load js at:", scriptEle.src);
-              if (window.SPA_INIT) {
-                window.SPA_INIT(args);
-              }
-            });
-            scriptEle.addEventListener("error", () => {
-              console.error("load js error at:", scriptEle.src);
-            });
-            newEle.appendChild(scriptEle);
+                // load js for views
+                const scriptEle = document.createElement("script");
+                scriptEle.type = "text/javascript";
+                scriptEle.src = `/assets/js/${name}.js`;
+                scriptEle.async = true;
+                scriptEle.addEventListener("load", () => {
+                  console.log("load js at:", scriptEle.src);
+                  if (window.SPA_INIT) {
+                    window.SPA_INIT(args);
+                  }
+                });
+                scriptEle.addEventListener("error", () => {
+                  console.error("load js error at:", scriptEle.src);
+                });
+                newEle.appendChild(scriptEle);
 
-            resolve();
-          })
-          .catch((err) => {
-            console.log("load page error:", err);
-            window.$ele.updateElementHtml(ele, "<h1>load page error</h1>");
-            resolve();
-          });
+                resolve();
+              })
+              .catch((err) => {
+                console.log("load page error:", err);
+                window.$ele.updateElementHtml(ele, "<h1>load page error</h1>");
+                resolve();
+              });
+          }
+        }, 500);
       } else {
         console.log("path not changed, skip load page:", name);
-        
+
         if (window.SPA_CHANGE) {
           window.SPA_CHANGE(args);
         }
