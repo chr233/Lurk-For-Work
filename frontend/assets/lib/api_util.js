@@ -3,10 +3,23 @@
 import { $http } from "./http_client.js";
 
 class ApiUtil {
+  constructor() {
+    this.userNameDict = {};
+  }
+
   checkToken() {
     return new Promise((resolve, reject) => {
       this.getUser(localStorage.getItem("userId")).then(([succ, data]) => {
         window.myInfo = succ ? data : {};
+
+        if (succ) {
+          const tasks = data.watcheeUserIds.map((id) => $api.getUser(id));
+
+          if (tasks.length > 0) {
+            Promise.all(tasks).then();
+          }
+        }
+
         resolve(succ);
       });
     });
@@ -83,10 +96,30 @@ class ApiUtil {
     });
   }
 
-  getUser(userId) {
+  getUser(userId, flag) {
     return new Promise((resolve, reject) => {
       $http.get(`/user?userId=${userId}`).then(([succ, data]) => {
-        console.log(data);
+        if (succ) {
+          if (!flag) {
+            const ids = [];
+            for (let id of data.watcheeUserIds) {
+              if (!this.userNameDict[id]) {
+                ids.push(id);
+              }
+            }
+
+            if (ids.length > 0) {
+              const tasks = ids.map((id) => $api.getUser(id, true));
+              if (tasks.length > 0) {
+                Promise.all(tasks).then();
+              }
+            }
+          }
+
+          if (!this.userNameDict[data.id]) {
+            this.userNameDict[data.id] = data.name;
+          }
+        }
         resolve([succ, data]);
       });
     });

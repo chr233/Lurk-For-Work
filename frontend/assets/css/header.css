@@ -9,7 +9,7 @@ header ul {
 header > ul > li {
   float: left;
 }
-
+#notifications > li > a,
 header ul > li > a {
   display: flex;
   color: var(--nav-font-color);
@@ -19,10 +19,21 @@ header ul > li > a {
   padding: 14px 16px;
 }
 
+#notifications > li,
+#notifications > li > a {
+  width: 100%;
+}
+
+#notifications {
+  max-width: 100%;
+  width: 400px;
+  right: 0;
+}
+
 header > ul > li > a > img {
   height: 20px;
 }
-
+#notifications > li:hover,
 header ul > li > a:hover {
   background-color: var(--nav-hover-bgcolor);
 }

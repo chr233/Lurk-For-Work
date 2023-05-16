@@ -1,16 +1,23 @@
 section.profile > * {
   text-align: center;
 }
-#search-user > p > * {
+.search-user > form > p > * {
   margin: 0 5px;
 }
-#search-user > p > input {
-  width: 200px;
+
+.search-user > form > p > input {
   line-height: 1.5;
-  padding: 0 10px;
+  padding: 0 5px;
   height: 2.25em;
 }
-#search-user > p > button {
+
+@media (min-width: 600px) {
+  .search-user > form > p > input {
+    width: 200px;
+  }
+}
+
+.search-user > form > p > button {
   padding: 7px 10px;
 }
 #user-profile {
@@ -31,10 +38,10 @@ section.profile > * {
   background-size: 30px 30px;
 }
 #user-profile > div > p,
-.profile-job-list > li>p {
+.profile-job-list > li > p {
   margin: 5px 0;
 }
-#user-profile >div>p>span {
+#user-profile > div > p > span {
   padding: 5px;
 }
 #user-profile > div > p > *:not(ul):hover {

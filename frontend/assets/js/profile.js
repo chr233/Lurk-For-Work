@@ -5,14 +5,16 @@
 
   // init
   window.SPA_INIT = (args) => {
+    const userEmail = document.getElementById("user-email");
     const userId = document.getElementById("user-id");
     const userProfile = document.getElementById("user-profile");
 
+    document.getElementById("watch-user").addEventListener("submit", watchUser);
     document
       .getElementById("search-user")
       .addEventListener("submit", searchUser);
 
-    objs = { userId, userProfile };
+    objs = { userEmail, userId, userProfile };
 
     if (args) {
       userId.value = args;
@@ -26,6 +28,23 @@
     userId.value = args;
     searchUser();
   };
+
+  function watchUser(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    const { userEmail } = objs;
+
+    $api.putUserWatch(userEmail.value, true).then(([succ, data]) => {
+      if (succ) {
+        alert("watch success");
+        userEmail.value = "";
+      } else {
+        alert(data);
+      }
+    });
+  }
 
   function searchUser(event) {
     if (event) {
